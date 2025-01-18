@@ -1,5 +1,5 @@
 rootProject.apply {
-    this.name = "kotlin-gradle-spring-template"
+    this.name = "flink-es-example"
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

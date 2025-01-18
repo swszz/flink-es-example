@@ -1,0 +1,71 @@
+networks:
+  flink-es:
+
+services:
+  zookeeper:
+    image: quay.io/debezium/zookeeper:2.1
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    networks:
+      - flink-es
+  kafka:
+    image: quay.io/debezium/kafka:2.1
+    ports:
+      - 9092:9092
+    links:
+      - zookeeper
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+    networks:
+      - flink-es
+  mysql:
+    image: quay.io/debezium/example-mysql:2.1
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=debezium
+      - MYSQL_USER=mysqluser
+      - MYSQL_PASSWORD=mysqlpw
+    networks:
+      - flink-es
+  connect:
+    image: quay.io/debezium/connect:2.1
+    ports:
+      - 8083:8083
+    links:
+      - kafka
+      - mysql
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=log.debezium.config
+      - OFFSET_STORAGE_TOPIC=log.debezium.offset
+      - STATUS_STORAGE_TOPIC=log.debezium.status
+    networks:
+      - flink-es
+  ui:
+    image: quay.io/debezium/debezium-ui:2.2
+    ports:
+      - 8090:8080
+    links:
+      - connect
+    environment:
+      - KAFKA_CONNECT_URIS=http://connect:8083
+    networks:
+      - flink-es
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - 8080:8080
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=kafka
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    networks:
+      - flink-es
+volumes:
+  es-data:
+    driver: local

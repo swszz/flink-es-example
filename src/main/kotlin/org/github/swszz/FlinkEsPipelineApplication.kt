@@ -4,11 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-internal class SpringBootTemplateApplication {
+internal class FlinkEsPipelineApplication {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            runApplication<SpringBootTemplateApplication>(*args)
+            runApplication<FlinkEsPipelineApplication>(*args)
         }
     }
 }
