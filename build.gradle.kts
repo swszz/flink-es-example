@@ -42,9 +42,11 @@ dependencies {
     implementation(libs.spring.boot.starter)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.test)
+    implementation(libs.spring.kafka)
 
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.data.elasticsearch)
+    implementation(libs.spring.boot.autoconfigure)
     runtimeOnly(libs.mysql.connector.j)
 
     implementation(libs.flink.java)
