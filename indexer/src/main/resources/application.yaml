@@ -1,0 +1,21 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+  data:
+    mongodb:
+      host: localhost
+      username: ats
+      password: ats
+      database: ats
+      port: 27017
+      authentication-database: admin
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: ats
+      auto-offset-reset: latest
+      enable-auto-commit: true
+
+server:
+  port: 7778

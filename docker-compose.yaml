@@ -1,7 +1,5 @@
-# reference : https://github.com/confluentinc/cp-all-in-one
-
 networks:
-  flink:
+  search-pipeline:
 
 services:
   mysql:
@@ -10,14 +8,14 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root-secret
-      MYSQL_DATABASE: flink
-      MYSQL_USER: flink
-      MYSQL_PASSWORD: flink
+      MYSQL_DATABASE: ats
+      MYSQL_USER: ats
+      MYSQL_PASSWORD: ats
       MYSQL_ROOT_HOST: '%'
     ports:
       - 3306:3306
     networks:
-      - flink
+      - search-pipeline
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
@@ -29,7 +27,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     networks:
-      - flink
+      - search-pipeline
 
   broker:
     image: confluentinc/cp-server:7.5.0
@@ -54,14 +52,13 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: localhost
-      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: true
       CONFLUENT_SUPPORT_CUSTOMER_ID: anonymous
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
     networks:
-      - flink
+      - search-pipeline
 
   connect:
     image: cnfldemos/cp-server-connect-datagen:0.6.2-7.5.0
@@ -92,7 +89,7 @@ services:
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
     networks:
-      - flink
+      - search-pipeline
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.5.0
@@ -106,16 +103,13 @@ services:
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: broker:29092
       CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: connect:8083
-      CONTROL_CENTER_KSQL_KSQLDB1_URL: http://ksqldb-server:8088
-      CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL: http://localhost:8088
-      CONTROL_CENTER_SCHEMA_REGISTRY_URL: http://schema-registry:8888
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
     networks:
-      - flink
+      - search-pipeline
   ui:
     image: quay.io/debezium/debezium-ui:2.2
     ports:
@@ -125,7 +119,7 @@ services:
     environment:
       - KAFKA_CONNECT_URIS=http://connect:8083
     networks:
-      - flink
+      - search-pipeline
 
   kafka-ui:
     image: provectuslabs/kafka-ui
@@ -137,4 +131,28 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:29092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
     networks:
-      - flink
+      - search-pipeline
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ats
+      MONGO_INITDB_ROOT_PASSWORD: ats
+    ports:
+      - "27017:27017"
+    networks:
+      - search-pipeline
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ats
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ats
+      ME_CONFIG_MONGODB_URL: mongodb://ats:ats@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongo
+    networks:
+      - search-pipeline

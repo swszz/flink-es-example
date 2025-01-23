@@ -6,8 +6,7 @@ spring-dependency-management = "1.1.6"
 junit = "5.11.0"
 junit-platform = "1.11.2"
 assert4j = "3.26.3"
-swagger = "2.8.3"
-flink = "1.20.0"
+swagger = "2.6.0"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -27,18 +26,13 @@ spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" 
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
-spring-boot-starter-data-elasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
+spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
 springdoc-openapi-starter = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger" }
+
 spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure" }
 
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
-flink-streaming-java = { module = "org.apache.flink:flink-streaming-java", version.ref = "flink" }
-flink-java = { module = "org.apache.flink:flink-java", version.ref = "flink" }
-flink-clients = { module = "org.apache.flink:flink-clients", version.ref = "flink" }
-flink-connector-base = { module = "org.apache.flink:flink-connector-base", version.ref = "flink" }
-flink-connector-files = { module = "org.apache.flink:flink-connector-files", version.ref = "flink" }
-flink-connector-kafka = { module = "org.apache.flink:flink-connector-kafka", version = "3.4.0-1.20" }
-flink-runtime-web = { module = "org.apache.flink:flink-runtime-web", version.ref = "flink" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 mysql-connector-j = { module = "com.mysql:mysql-connector-j" }
 
 kotlin-junit-test = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }

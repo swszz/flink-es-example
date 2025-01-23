@@ -1,21 +1,18 @@
-package org.github.swszz.candidate
+package org.github.swszz.evaluation
 
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.ZonedDateTime
 
-@Entity(name = "candidate")
-class Candidate(
+@Entity(name = "evaluation")
+class Evaluation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(columnDefinition = "VARCHAR(255)", unique = true, nullable = false)
-    val email: String,
-
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
-    val name: String,
+    @Column(columnDefinition = "TEXT")
+    val comment: String,
 
     @CreationTimestamp
     @Column
@@ -26,11 +23,8 @@ class Candidate(
     val updatedAt: ZonedDateTime? = null,
 ) {
     companion object {
-        fun generate(email: String, name: String): Candidate {
-            return Candidate(
-                email = email,
-                name = name
-            )
+        fun generate(comment: String): Evaluation {
+            return Evaluation(comment = comment)
         }
     }
 }

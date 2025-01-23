@@ -3,9 +3,9 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:mysql://localhost:3306/flink
-    username: flink
-    password: flink
+    url: jdbc:mysql://localhost:3306/ats
+    username: ats
+    password: ats
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
@@ -13,8 +13,6 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
-  kafka:
-    bootstrap-servers: localhost:9092
 
 server:
   port: 7777
